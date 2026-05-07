@@ -1,0 +1,28 @@
+[project]
+name = "io-bench"
+version = "0.1.0"
+description = "Economics textbook benchmark generation and evaluation pipeline."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.0",
+    "anthropic",
+    "pyyaml>=6.0",
+    "datasets>=2.16",
+    "sympy>=1.12",
+]
+
+[project.scripts]
+io-bench = "econ_cli:main"
+econ-bench = "econ_cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["econ_cli"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["build_steps*", "core*", "commands*"]

@@ -1,0 +1,177 @@
+{
+  "selection_criteria": {
+    "non_expert_comment_5": "annotator_comment == 5 or annotator_comment_codes contains 5",
+    "expert_explicitly_correct_ids": [
+      "1.5/main",
+      "10.2/2#2",
+      "4.5/iii",
+      "5.3/iii",
+      "6.2/main",
+      "6.3/main",
+      "7.2/2",
+      "8.10/2"
+    ],
+    "expert_sampled_subquestion_pairs": [
+      {
+        "split": "chapter_1",
+        "id": "1.2/main"
+      },
+      {
+        "split": "chapter_1",
+        "id": "1.5/main"
+      },
+      {
+        "split": "chapter_10",
+        "id": "10.2/2#2"
+      },
+      {
+        "split": "chapter_10",
+        "id": "10.3/main#1"
+      },
+      {
+        "split": "chapter_10",
+        "id": "10.6/1"
+      },
+      {
+        "split": "chapter_2",
+        "id": "2.7/i#2"
+      },
+      {
+        "split": "chapter_3",
+        "id": "3.1/ii#2"
+      },
+      {
+        "split": "chapter_3",
+        "id": "3.7/i"
+      },
+      {
+        "split": "chapter_4",
+        "id": "4.5/ii"
+      },
+      {
+        "split": "chapter_4",
+        "id": "4.5/iii"
+      },
+      {
+        "split": "chapter_4",
+        "id": "4.7/main"
+      },
+      {
+        "split": "chapter_5",
+        "id": "5.3/iii"
+      },
+      {
+        "split": "chapter_6",
+        "id": "6.2/main"
+      },
+      {
+        "split": "chapter_6",
+        "id": "6.3/main"
+      },
+      {
+        "split": "chapter_7",
+        "id": "7.2/2"
+      },
+      {
+        "split": "chapter_8",
+        "id": "8.10/2"
+      },
+      {
+        "split": "chapter_8",
+        "id": "8.10/4#1"
+      },
+      {
+        "split": "chapter_8",
+        "id": "8.6/2#2"
+      },
+      {
+        "split": "chapter_9",
+        "id": "9.1/2#1"
+      },
+      {
+        "split": "chapter_intro",
+        "id": "1/iii#2"
+      }
+    ],
+    "expert_silent_no_change": "expert review entry has empty comment and empty rewritten question/solution/answer",
+    "expert_ambiguous_excluded_ids": [
+      "3.7/i"
+    ],
+    "multi_output_json_overrides": [
+      "10.7/main#1",
+      "5.3/i",
+      "5.5/ii#1",
+      "5.9/i"
+    ],
+    "question_overrides": [
+      "1.7/i",
+      "2.6/main#1"
+    ]
+  },
+  "output_format": "hf_json-compatible rows copied from data/hf_json with confirmation metadata and post-build overrides applied",
+  "source_counts": {
+    "non_expert_comment_5": 147,
+    "expert_explicitly_correct": 8
+  },
+  "total_rows": 155,
+  "rows_per_split": {
+    "chapter_intro": 4,
+    "chapter_1": 21,
+    "chapter_2": 10,
+    "chapter_3": 7,
+    "chapter_4": 9,
+    "chapter_5": 12,
+    "chapter_6": 17,
+    "chapter_7": 5,
+    "chapter_8": 17,
+    "chapter_9": 9,
+    "chapter_10": 15,
+    "chapter_11": 29
+  },
+  "ignored_non_sampled_expert_rows": [
+    {
+      "split": "chapter_2",
+      "id": "2.7/i#1",
+      "reason": "expert_context_not_sampled_subquestion"
+    },
+    {
+      "split": "chapter_2",
+      "id": "2.7/ii#1",
+      "reason": "expert_context_not_sampled_subquestion"
+    },
+    {
+      "split": "chapter_2",
+      "id": "2.7/ii#2",
+      "reason": "expert_context_not_sampled_subquestion"
+    },
+    {
+      "split": "chapter_3",
+      "id": "3.1/i",
+      "reason": "expert_context_not_sampled_subquestion"
+    },
+    {
+      "split": "chapter_3",
+      "id": "3.1/ii#1",
+      "reason": "expert_context_not_sampled_subquestion"
+    },
+    {
+      "split": "chapter_3",
+      "id": "3.7/ii",
+      "reason": "expert_context_not_sampled_subquestion"
+    },
+    {
+      "split": "chapter_3",
+      "id": "3.7/iii",
+      "reason": "expert_context_not_sampled_subquestion"
+    },
+    {
+      "split": "chapter_5",
+      "id": "5.3/iv",
+      "reason": "expert_context_not_sampled_subquestion"
+    }
+  ],
+  "missing_hf_base_rows": [],
+  "missing_expert_base_rows": [],
+  "missing_expert_confirmation_rows": [],
+  "release_note": "Internal paths, reviewer identifiers, local review sources, and generated run artifacts were removed from this repository."
+}

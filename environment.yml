@@ -1,0 +1,12 @@
+name: io-bench
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - openai>=1.0
+      - anthropic
+      - pyyaml>=6.0
+      - datasets>=2.16
+      - sympy>=1.12

@@ -1,0 +1,225 @@
+azure:
+  deployment_name: "gpt-5.4"
+  subscription_key: ""   # fill your Azure key here or use env AZURE_OPENAI_KEY
+  endpoint: ""           # fill your endpoint here or use env AZURE_OPENAI_ENDPOINT
+  api_version: "2024-12-01-preview"
+  max_retries: 3
+
+anthropic:
+  api_key: ""            # optional; or env ANTHROPIC_FOUNDRY_API_KEY / ANTHROPIC_API_KEY
+  base_url: ""           # optional; Azure AI Foundry Anthropic base_url, or env ANTHROPIC_FOUNDRY_BASE_URL
+  max_retries: 3         # optional; fallback to azure.max_retries when omitted
+
+foundry_openai:
+  base_url: ""           # optional; OpenAI-compatible Foundry endpoint, or env FOUNDRY_OPENAI_BASE_URL / AZURE_OPENAI_BASE_URL
+  api_key: ""            # optional; or env FOUNDRY_OPENAI_API_KEY / AZURE_INFERENCE_CREDENTIAL / fallback to azure.subscription_key
+  models: []
+
+paths:
+  chapters_root: "datasets/chapters"
+  hf_json_dir: "data/book_final_155"
+  hf_dataset_dir: "data/hf_dataset"
+  balanced_review_dir: "data/review_balanced"
+  review_annotations_dir: "data/review_annotations"
+  by_model_dir: "data/by_model"      # primary root for solver-model artifacts
+  workflows_dir: "data/workflows"    # workflow manifests keyed by workflow_id
+  generations_dir: "data/generations"  # legacy fallback only
+  pipeline_dir: "data/pipeline"
+  evaluations_dir: "data/evaluations"  # legacy fallback only
+  evaluations_llm_dir: "data/evaluations_llm"  # legacy fallback only
+
+build:
+  max_workers: 4
+  chapter_filter: null
+  skip_existing_split: false
+  reference_fix_temperature: 0.0
+  split_temperature: 0.0
+  transform_temperature: 0.0
+  convert_temperature: 0.0
+  max_items_per_split: null
+  include_source_answer: true
+  rebalance_temperature: 0.0
+  rebalance_max_attempts: 3
+  rebalance_seed: 42
+
+generate:
+  deployment_name: ""   # optional; if empty, fallback to azure.deployment_name. can be overridden by `econ_cli.py generate --model ...`
+  max_workers: 8
+  solve_temperature: 0.0
+  max_solve_tokens: 32768
+  convert_temperature: 0.0
+  max_convert_tokens: 512
+  resume: true
+  reasoning_defaults:
+    solve_mode: "on"
+    convert_mode: "off"
+    openai_effort: "xhigh"
+    claude_effort: "max"
+    claude_budget_tokens: 2048
+    claude_thinking_display: ""
+  model_profiles:
+    gpt5_latest:
+      match_substrings:
+        - "gpt-5.4"
+        - "gpt-5.5"
+      reasoning_interface: "openai_reasoning_effort"
+      reasoning_default_mode: "on"
+      native_reasoning_efforts:
+        - "none"
+        - "minimal"
+        - "low"
+        - "medium"
+        - "high"
+        - "xhigh"
+      reasoning_on_effort: "xhigh"
+      reasoning_off_effort: "none"
+    gpt5_reasoning:
+      match_substrings:
+        - "gpt-5.1"
+        - "gpt-5.2"
+      reasoning_interface: "openai_reasoning_effort"
+      reasoning_default_mode: "on"
+      native_reasoning_efforts:
+        - "none"
+        - "minimal"
+        - "low"
+        - "medium"
+        - "high"
+        - "xhigh"
+      reasoning_on_effort: "xhigh"
+      reasoning_off_effort: "none"
+    gpt5_legacy:
+      match_substrings:
+        - "gpt-5-mini"
+        - "gpt-5-nano"
+        - "gpt-5"
+      reasoning_interface: "openai_reasoning_effort"
+      reasoning_default_mode: "on"
+      native_reasoning_efforts:
+        - "low"
+        - "medium"
+        - "high"
+      reasoning_on_effort: "high"
+    claude_adaptive:
+      match_substrings:
+        - "claude-opus-4-6"
+        - "claude-opus-4-7"
+        - "claude-sonnet-4-6"
+      reasoning_interface: "anthropic_adaptive_thinking"
+      reasoning_default_mode: "on"
+      native_reasoning_efforts:
+        - "low"
+        - "medium"
+        - "high"
+        - "max"
+      adaptive_effort: "max"
+      thinking_display: ""
+    claude_manual:
+      match_substrings:
+        - "claude-opus-4"
+        - "claude-sonnet-4"
+      reasoning_interface: "anthropic_manual_thinking"
+      reasoning_default_mode: "on"
+      thinking_budget_tokens: 2048
+      thinking_display: ""
+
+generate_vllm:
+  capability_defaults:
+    base:
+      solve_temperature: 0.0
+      solve_top_p: 1.0
+      solve_top_k: null
+      max_solve_tokens: 32768
+      solve_repetition_penalty: 1.0
+    instruct:
+      solve_temperature: 0.0
+      solve_top_p: 1.0
+      solve_top_k: null
+      max_solve_tokens: 32768
+      solve_repetition_penalty: 1.0
+    reasoning:
+      max_solve_tokens: 32768
+  convert:
+    temperature: 0.0
+    max_tokens: 512
+  model_profiles:
+    qwen3:
+      match_regex:
+        - "(^|[^a-zA-Z0-9])qwen3([^a-zA-Z0-9]|$)"
+      capability_type: "reasoning"
+      reasoning_interface: "chat_template_enable_thinking"
+      reasoning_default_mode: "on"
+      reasoning_backend: "qwen3_thinking"
+    gemma4:
+      match_substrings:
+        - "gemma-4"
+        - "gemma4"
+      capability_type: "reasoning"
+      reasoning_interface: "chat_template_enable_thinking"
+      reasoning_default_mode: "on"
+    deepseek_r1:
+      match_substrings:
+        - "deepseek-r1"
+        - "r1-distill"
+      capability_type: "reasoning"
+      reasoning_interface: "parser_only"
+      reasoning_default_mode: "on"
+      reasoning_parser: "deepseek_r1"
+    deepseek_v3_family:
+      match_substrings:
+        - "deepseek-v3.1"
+        - "deepseekv3.1"
+      capability_type: "reasoning"
+      reasoning_interface: "chat_template_thinking_bool"
+      reasoning_default_mode: "on"
+    llama3_instruct:
+      match_substrings:
+        - "llama-3.1-8b-instruct"
+        - "llama3.1-8b"
+        - "llama-3.3-70b-instruct"
+        - "llama3.3-70b"
+        - "meta-llama/llama-3.1-8b-instruct"
+        - "meta-llama/llama-3.3-70b-instruct"
+      capability_type: "instruct"
+
+evaluate_llm:
+  judge_model: "gpt-5.5"
+
+models:
+  default_solver_model: "gpt-5.2"
+  allowed_solver_models:
+    - "gpt-5.1"
+    - "gpt-5.2"
+    - "gpt-5.4"
+    - "gpt-5.5"
+    - "claude-opus-4"
+    - "claude-sonnet-4-6"
+    - "claude-opus-4-6"
+    - "claude-opus-4-7"
+    - "claude-sonnet-4"
+    - "Llama-3.1-8B-Instruct"
+    - "llama-3.1-8b-instruct"
+    - "llama3.1-8b"
+    - "meta-llama/Llama-3.1-8B-Instruct"
+    - "Llama-3.3-70B-Instruct"
+    - "llama-3.3-70b-instruct"
+    - "llama3.3-70b"
+    - "meta-llama/Llama-3.3-70B-Instruct"
+    - "DeepSeek-R1-Distill-Qwen-7B"
+    - "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+    - "DeepSeek-R1-Distill-Qwen-14B"
+    - "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
+    - "DeepSeek-R1-Distill-Qwen-32B"
+    - "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
+    - "Qwen3-32B"
+    - "Qwen/Qwen3-32B"
+    - "Qwen3-8B"
+    - "Qwen/Qwen3-8B"
+
+cost_logging:
+  enabled: true
+  root_dir: "data/by_model"
+  capture_raw_usage: true
+
+analyze:
+  max_workers: 4

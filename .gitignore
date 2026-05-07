@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Local configuration and credentials
+.env
+.env.*
+config.local.yaml
+config.private.yaml
+secrets/
+
+# Local IDE/tool state
+.claude/
+.vscode/
+.idea/
+.DS_Store
+
+# Generated experiment artifacts
+data/by_model/
+data/by_model_*/
+data/workflows/
+data/reports/
+data/generations/
+data/evaluations/
+data/evaluations_llm/
+data/hf_dataset/
+data/pipeline/
+logs/
+
+# Large local model/cache outputs
+*.log
+*.tmp
+*.cache
