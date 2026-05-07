@@ -6,9 +6,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-BASE_DIR = Path("econ_ai/problem_type_analysis")
-BY_MODEL_DIR = Path("econ_ai/data/by_model")
-LABELS_PATH = BASE_DIR / "problem_type_label.csv"
+BASE_DIR = Path(__file__).resolve().parent
+REPO_ROOT = BASE_DIR.parent
+BOOK_DATA_DIR = REPO_ROOT / "data" / "book_final_155"
+BY_MODEL_DIR = REPO_ROOT / "data" / "by_model"
 OUTPUT_DIR = BASE_DIR / "figures"
 OUTPUT_PDF = OUTPUT_DIR / "plot_category_accuracy_max_capability_family.pdf"
 
@@ -59,8 +60,21 @@ MARKERS = ["o", "s", "^", "D", "v", "P"]
 
 
 def load_labels() -> pd.DataFrame:
-    labels_df = pd.read_csv(LABELS_PATH, dtype=str)[["id", "final_label"]]
+    frames = []
+    for jsonl_path in sorted(BOOK_DATA_DIR.glob("*.jsonl")):
+        part = pd.read_json(jsonl_path, lines=True, dtype={"id": str})
+        frames.append(part[["id", "problem_type_label"]].copy())
+
+    if not frames:
+        raise ValueError(f"No dataset JSONL files found in {BOOK_DATA_DIR}")
+
+    labels_df = pd.concat(frames, ignore_index=True).rename(
+        columns={"problem_type_label": "final_label"}
+    )
     labels_df = labels_df[labels_df["final_label"].isin(CATEGORY_ORDER)].copy()
+    if labels_df["id"].duplicated().any():
+        duplicates = labels_df.loc[labels_df["id"].duplicated(), "id"].tolist()
+        raise ValueError(f"Duplicate labeled ids in {BOOK_DATA_DIR}: {duplicates[:5]}")
     return labels_df
 
 
